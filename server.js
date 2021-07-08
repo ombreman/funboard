@@ -25,29 +25,31 @@ app.get('/write', (req, res) => {
     res.sendFile(__dirname + '/write.html')
 });
 
+// CREATE
 app.post('/add', (req, res) => {
     db.collection('counter').findOne({ name: 'postNumber' }, (error, result) => {
         console.log(result.totalPost);
         let numberOfPost = result.totalPost;
-        db.collection('post').insertOne({ _id: numberOfPost + 1, date: req.body.date, title: req.body.title }, (error, result) => {
-            console.log('저장완료');
+        db.collection('post').insertOne({ _id: numberOfPost + 1, title: req.body.title, content: req.body.content }, (error, result) => {
             db.collection('counter').updateOne({ name: 'postNumber' }, { $inc: { totalPost: 1 } }, (error, result) => {
                 if (error) {return console.log('에러입니다!')};
-                res.send('전송완료');
+                res.send('<h1>게시글이 저장되었습니다!</h1>');
             });
         });
     });
 });
 
+// READ
 app.get('/list', (req, res) => {
     db.collection('post').find().toArray((error, result) => {
         res.render('list.ejs', { posts: result });
     });
 });
 
+// DELETE
 app.delete('/delete', (req, res) => {
     console.log(req.body)
-    req.body = parseInt(req.body._id);
+    req.body._id = parseInt(req.body._id);
     db.collection('post').deleteOne(req.body, (error, result) => {
         console.log('게시글 삭제완료')
         req.status(200).send({ message: '얏호! 성공!' });
