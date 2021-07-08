@@ -8,7 +8,7 @@ app.use('/public', express.static('public'));
 
 // const { get } = require('mongoose'); // ???? 이거 언제적음???
 
-var db;
+let db;
 MongoClient.connect('mongodb+srv://jcg3417:1q2w3e4r@cluster0.8pzke.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', (error, client) => {
     if (error) return console.log(error);
     db = client.db('todoapp');
@@ -62,4 +62,9 @@ app.get('/detail/:id', (req, res) => {
         console.log(result);
         res.render('detail.ejs', { data: result });
     });
+});
+
+// Edit Page
+app.get('/edit', (req, res) => {
+    res.send('edit.ejs');
 });
