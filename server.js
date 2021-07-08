@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 app.use(express.urlencoded({ extended: true }));
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
+app.use('/public', express.static('public'));
 
 // const { get } = require('mongoose'); // ???? 이거 언제적음???
 
@@ -18,11 +19,11 @@ MongoClient.connect('mongodb+srv://jcg3417:1q2w3e4r@cluster0.8pzke.mongodb.net/m
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
+    res.render('index.ejs');
 });
 
 app.get('/write', (req, res) => {
-    res.sendFile(__dirname + '/write.html')
+    res.render('write.ejs');
 });
 
 // CREATE
@@ -47,7 +48,7 @@ app.get('/list', (req, res) => {
 
 // DELETE
 app.delete('/delete', (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     req.body._id = parseInt(req.body._id);
     db.collection('post').deleteOne(req.body, (error, result) => {
         console.log('게시글 삭제완료')
@@ -59,6 +60,6 @@ app.delete('/delete', (req, res) => {
 app.get('/detail/:id', (req, res) => {
     db.collection('post').findOne({ _id: parseInt(req.params.id) }, (error, result) => {
         console.log(result);
-        res.render('detail.ejs', { data: result});
+        res.render('detail.ejs', { data: result });
     });
 });
