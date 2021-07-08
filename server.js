@@ -5,6 +5,8 @@ app.use(express.urlencoded({ extended: true }));
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 // const { get } = require('mongoose'); // ???? 이거 언제적음???
 
@@ -58,13 +60,15 @@ app.delete('/delete', (req, res) => {
 
 // Detail Page
 app.get('/detail/:id', (req, res) => {
-    db.collection('post').findOne({ _id: parseInt(req.params.id) }, (error, result) => {
-        console.log(result);
+    db.collection('post').findOne({ _id: parseInt(req.params.id)}, (error, result) => {
         res.render('detail.ejs', { data: result });
     });
 });
 
 // Edit Page
-app.get('/edit', (req, res) => {
-    res.send('edit.ejs');
+app.get('/edit/:id', (req, res) => {
+    db.collection('post').findOne({ _id: parseInt(req.params.id)}, (error, result) => {
+        console.log(result);
+        res.render('edit.ejs', { post: result });
+    });
 });
