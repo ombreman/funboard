@@ -28,7 +28,6 @@ app.get('/write', (req, res) => {
 // CREATE
 app.post('/add', (req, res) => {
     db.collection('counter').findOne({ name: 'postNumber' }, (error, result) => {
-        console.log(result.totalPost);
         let numberOfPost = result.totalPost;
         db.collection('post').insertOne({ _id: numberOfPost + 1, title: req.body.title, content: req.body.content }, (error, result) => {
             db.collection('counter').updateOne({ name: 'postNumber' }, { $inc: { totalPost: 1 } }, (error, result) => {
@@ -52,6 +51,14 @@ app.delete('/delete', (req, res) => {
     req.body._id = parseInt(req.body._id);
     db.collection('post').deleteOne(req.body, (error, result) => {
         console.log('게시글 삭제완료')
-        req.status(200).send({ message: '얏호! 성공!' });
+        res.status(200).send({ message: '얏호! 성공!' });
+    });
+});
+
+// Detail Page
+app.get('/detail/:id', (req, res) => {
+    db.collection('post').findOne({ _id: parseInt(req.params.id) }, (error, result) => {
+        console.log(result);
+        res.render('detail.ejs', { data: result});
     });
 });

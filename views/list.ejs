@@ -45,6 +45,7 @@
     <ul class="list-group">
         <% for (let i=0; i < posts.length; i++) { %>
             <li class="list-group-item">
+                <h5>No. <%= posts[i]._id %></h5>
                 <h4>Title : <%= posts[i].title %></h4>
                 <p>Content : <%= posts[i].content %></p>
                 <button class = "delete" data-id = "<%= posts[i]._id %>">DELETE!</button>
@@ -56,17 +57,20 @@
 
     <script>
 
-        $('.delete').click(() => {
+        $('.delete').click((e) => {
+            var 글번호 = e.target.dataset.id;
+            var 지금누른거 = $(this);
             $.ajax({
-                method: 'DELETE',
-                url: '/delete',
-                data: { _id: 4 }
-            }).done(( result ) => {
+            method: 'DELETE',
+            url: '/delete',
+            data: { _id: 글번호 }
+
+            }).done((result) => {
                 console.log('Ajax request success!!!')
-                $(this).parent('li').fadeOut();
-            }).fail(( xhr, code, err ) => {
+                지금누른거.parent('li').fadeOut();
+
+            }).fail(() => {
                 console.log('Ajax request failed T_T')
-                console.log(xhr, code, err)
             });
         });
 
