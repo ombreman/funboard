@@ -72,3 +72,11 @@ app.get('/edit/:id', (req, res) => {
         res.render('edit.ejs', { post: result });
     });
 });
+
+// UPDATE
+app.put('/edit', (req, res) => {
+    db.collection('post').updateOne({ _id: parseInt(req.body.id)}, { $set: { title: req.body.title, content: req.body.content }}, (error, result) => {
+        console.log('수정완료!');
+        res.redirect('/list');
+    });
+});
