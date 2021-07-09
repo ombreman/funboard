@@ -31,38 +31,12 @@
                     <h5>No. <%= posts[i]._id %></h5>
                     <h4>Title : <%= posts[i].title %></h4>
                     <p>Content : <%= posts[i].content %></p>
-                    <button class = "delete" data-id = "<%= posts[i]._id %>">DELETE</button>
+                    <button class = "btn btn-danger delete" data-id = "<%= posts[i]._id %>">DELETE</button>
                 </li>
             <% } %>
         </ul>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
-    <script>
-
-        $('#search').click(function(){
-            var 입력한값 = $('#search-input').val();
-            window.location.replace('/search?calue=' + 입력한값);
-        });
-
-        $('.delete').click((e) => {
-            var 글번호 = e.target.dataset.id;
-            var 지금누른거 = $(this);
-            $.ajax({
-            method: 'DELETE',
-            url: '/delete',
-            data: { _id: 글번호 }
-
-            }).done((result) => {
-                console.log('Ajax request success!!!')
-                지금누른거.parent('li').fadeOut();
-
-            }).fail(() => {
-                console.log('Ajax request failed T_T')
-            });
-        });
-
-    </script>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
