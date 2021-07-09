@@ -48,6 +48,14 @@ app.get('/list', (req, res) => {
     });
 });
 
+// UPDATE
+app.put('/edit', (req, res) => {
+    db.collection('post').updateOne({ _id: parseInt(req.body.id)}, { $set: { title: req.body.title, content: req.body.content }}, (error, result) => {
+        console.log('수정완료!');
+        res.redirect('/list');
+    });
+});
+
 // DELETE
 app.delete('/delete', (req, res) => {
     console.log(req.body);
@@ -70,13 +78,5 @@ app.get('/edit/:id', (req, res) => {
     db.collection('post').findOne({ _id: parseInt(req.params.id)}, (error, result) => {
         console.log(result);
         res.render('edit.ejs', { post: result });
-    });
-});
-
-// UPDATE
-app.put('/edit', (req, res) => {
-    db.collection('post').updateOne({ _id: parseInt(req.body.id)}, { $set: { title: req.body.title, content: req.body.content }}, (error, result) => {
-        console.log('수정완료!');
-        res.redirect('/list');
     });
 });
